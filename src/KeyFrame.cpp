@@ -1,3 +1,11 @@
+/**
+ * @file KeyFrame.h
+ * @author Zhengye (996227064@qq.com)
+ * @brief KeyFrame
+ * @version 0.1.0
+ * @date 2021-11-10
+ **/
+
 #include "KeyFrame.h"
 
 namespace HIVE_SLAM{

@@ -14,19 +14,24 @@
 #include<opencv2/core/core.hpp>
 #include "Frame.h"
 #include "Element.h"
-#include "Marker.h"
-#include "Pole.h"
-#include "RoadLine.h"
-#include "RoadPlane.h"
-#include "Signal.h"
 
 namespace HIVE_SLAM{
 
 class PointElement;
 class KeyFrame{
 public:
-    KeyFrame();
-    KeyFrame(const cv::Mat &img, const cv::Mat &Tcw, const cv::Mat &K);
+    /**
+     * @brief Create a keyframe
+     * @param[in] img The origin image of this keyframe
+     * @param[in] Tcw The pos of this keyframe
+     * @param[in] K The internal parameters matrix
+     **/
+    explicit KeyFrame(const cv::Mat &img, const cv::Mat &Tcw, const cv::Mat &K);
+
+    /**
+     * @brief Project the point to this keyframe
+     * @param[in] point The point need to be projected
+     **/
     cv::Mat ProjectPoint(PointElement* Point);
 
 protected:
