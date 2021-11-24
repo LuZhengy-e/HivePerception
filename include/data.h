@@ -31,6 +31,22 @@ class NuScenes{
     void read_from_file(const std::string& filename);
 };
 
+class Kitti{
+    /**
+     * @brief Empty construct function
+     **/
+    Kitti();
+
+    /**
+     * @brief Construct by input dir name
+     * @param[in] filename input dir of nuscenes datasets
+    **/
+   Kitti(const std::string& filename);
+
+   void read_from_file(const std::string& filename);
+
+};
+
 };
 
 
