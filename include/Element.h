@@ -13,6 +13,7 @@
 #include<set>
 #include "KeyFrame.h"
 #include<opencv2/core/core.hpp>
+#include<Eigen/Core>
 
 namespace HIVE_SLAM{
 
@@ -51,6 +52,8 @@ public:
      **/
     void deleteObservations(KeyFrame* pKF);
 
+    std::map<KeyFrame*, int> getObservations() const;
+
     /**
      * @brief Get world pos
      * @return World pos
@@ -70,14 +73,19 @@ public:
      **/
     cv::Mat getProjection(KeyFrame* pKF);
 
-public:
-    long unsigned int mnId; // The global id of PointElement
+    Eigen::Matrix<double,3,1> getVectorPos() const;
+
+    long unsigned int getId() const;
+
+    std::string getType() const;
+
     
 protected:
     cv::Mat mWorldPos; // The global pos of this 
     std::map<KeyFrame*, int> mObversations; // <The keyframe that can observe this point, the index of this point in the keyframe>
     bool mbon_plane;
     unsigned int mnObs;
+    long unsigned int mnId; // The global id of PointElement
     std::string mType; 
     
 };

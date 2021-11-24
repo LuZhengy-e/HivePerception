@@ -12,10 +12,15 @@
 #include<iostream>
 #include<fstream>
 #include<opencv2/core/core.hpp>
+#include<g2o/core/g2o_core_api.h>
+#include<g2o/types/slam3d/se3quat.h>
+
 #include "Frame.h"
 #include "Element.h"
 
 namespace HIVE_SLAM{
+
+static long unsigned int KeyFrameId = 0;
 
 class PointElement;
 class KeyFrame{
@@ -34,9 +39,23 @@ public:
      **/
     cv::Mat ProjectPoint(PointElement* Point);
 
+    void setPos(const cv::Mat& Tcw);
+
+    cv::Mat getPos();
+
+    g2o::SE3Quat getSE3Pos() const;
+
+    long unsigned int getId() const;
+
+    PointElement* getPoint(const std::string& type, const int id);
+
+    cv::Mat getInner() const;
+
 protected:
     cv::Mat mTcw;
     cv::Mat mK;
+    long unsigned int mnId;
+    std::map<std::string, std::vector<PointElement*> > mvPoints;
 };
 
 };

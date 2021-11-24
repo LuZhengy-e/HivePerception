@@ -37,10 +37,12 @@ void PointElement::deleteObservations(KeyFrame* pKF){
     }
 }
 
+std::map<KeyFrame*, int> PointElement::getObservations() const{
+    return mObversations;
+}
+
 cv::Mat PointElement::getWorldPos() const{
-    cv::Mat tmp_P;
-    mWorldPos.copyTo(tmp_P);
-    return tmp_P;
+    return mWorldPos.clone();
 }
 
 void PointElement::setWorldPos(const cv::Mat &Pos){
@@ -51,6 +53,21 @@ cv::Mat PointElement::getProjection(KeyFrame* pKF){
     if(mObversations.count(pKF)){
         return pKF->ProjectPoint(this);
     }
+}
+
+Eigen::Matrix<double, 3, 1> PointElement::getVectorPos() const{
+    Eigen::Matrix<double,3,1> v;
+    v << mWorldPos.at<double>(0), mWorldPos.at<double>(1), mWorldPos.at<double>(2);
+
+    return v;
+}
+
+long unsigned int PointElement::getId() const{
+    return mnId;
+}
+
+std::string PointElement::getType() const{
+    return mType;
 }
 
 };
