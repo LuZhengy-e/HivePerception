@@ -12,11 +12,17 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<vector>
 #include<jsoncpp/json/json.h>
+#include<pcl/console/print.h>
+#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
+#include <pcl/io/pcd_io.h>
 
 namespace HIVE_SLAM{
 
 class NuScenes{
+public:
     /**
      * @brief Empty construct function
      **/
@@ -32,6 +38,7 @@ class NuScenes{
 };
 
 class Kitti{
+public:
     /**
      * @brief Empty construct function
      **/
@@ -41,9 +48,11 @@ class Kitti{
      * @brief Construct by input dir name
      * @param[in] filename input dir of nuscenes datasets
     **/
-   Kitti(const std::string& filename);
+    Kitti(const std::string& filename);
 
-   void read_from_file(const std::string& filename);
+    void read_from_file(const std::string& filename);
+
+    static void bin2pcd(const std::string& in_file, const std::string& out_file);
 
 };
 

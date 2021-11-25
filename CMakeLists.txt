@@ -33,12 +33,22 @@ else()
    message(STATUS "Using Opencv ${OpenCV_VERSION}")
 endif()
 
+add_definitions(-DBOOST_ERROR_CODE_HEADOR_ONLY) ## for boosr
+
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(G2O REQUIRED)
+if(G2O_FOUND)
+  message(STATUS "Using G2O ${G2O_ROOT}")
+endif()
+find_package(PCL REQUIRED)
+# find_package(Boost REQUIRED COMPONENTS system filesystem thread)
 
 set(Jsoncpp_INCLUDE_PATH "/usr/include/jsoncpp")
 set(Jsoncpp_LIBRARY "/usr/lib/x86_64-linux-gnu/libjsoncpp.so")
+
+# set(PCL_INCLUDE_DIRS "/usr/include/pcl-1.7")
+# set(PCL_LIBRARY_DIRS "/usr/lib/x86_64-linux-gnu/libpcl_common.so")
 
 include_directories(
 ${PROJECT_SOURCE_DIR}
@@ -47,9 +57,13 @@ ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
 ${Jsoncpp_INCLUDE_PATH}
 ${G2O_INCLUDE_DIRS}
+${PCL_INCLUDE_DIRS}
+${Boost_INCLUDE_DIRS}
 )
 
 add_library(${PROJECT_NAME} SHARED
+src/Optimizer.cpp
+src/data.cpp
 src/Element.cpp
 src/KeyFrame.cpp
 src/Marker.cpp
@@ -63,7 +77,15 @@ ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
 ${G2O_CORE_LIBRARY}
 ${G2O_STUFF_LIBRARY}
+# g2o_core
+# g2o_stuff
+g2o_types_sba
+${PCL_LIBRARIES}
+${Boost_LIBRARIES}
 )
 
 add_executable(test test.cpp)
 target_link_libraries(test ${PROJECT_NAME})
+
+add_executable(bin2pcd bin2pcd.cpp)
+target_link_libraries(bin2pcd ${PROJECT_NAME})
