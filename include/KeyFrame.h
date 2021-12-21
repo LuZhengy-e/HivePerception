@@ -52,6 +52,7 @@ public:
     cv::Mat getInner() const;
 
 protected:
+    cv::Mat mImage;
     cv::Mat mTcw;
     cv::Mat mK;
     long unsigned int mnId;

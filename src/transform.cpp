@@ -10,6 +10,8 @@
 
 namespace HIVE_SLAM{
 
+CoordTranform::CoordTranform(){};
+
 CoordTranform::CoordTranform(cv::Mat& K, 
                              cv::Mat& Tcl,
                              cv::Mat& Tcv)
@@ -23,11 +25,12 @@ cv::Mat CoordTranform::Tlc(cv::Mat& point){
     return _mTcl * point;
 }
 
-cv::Mat CoordTranform::Tcp(cv::Mat& point, cv::Mat& Tcw){
-    double z = point.at<double>(2, 0);
-    cv::Mat rotate_p = Tcw * point / z;
+cv::Mat CoordTranform::Tcp(const cv::Mat& point, const cv::Mat& Tcw){
+    cv::Mat rotate_p = Tcw * point;
+    double z = rotate_p.at<double>(2, 0);
+    cv::Mat pixel = _mK * (rotate_p.rowRange(0, 3)) / z;
 
-    return _mK * (rotate_p.rowRange(0, 3));
+    return pixel.clone();
 }
 
 cv::Mat CoordTranform::Tlp(cv::Mat& point){

@@ -1,5 +1,4 @@
 #include<map>
-#include<opencv2/core/core.hpp>
 #include<g2o/core/g2o_core_api.h>
 #include<g2o/core/sparse_optimizer.h>
 #include<g2o/types/sba/types_sba.h>
@@ -134,9 +133,9 @@ void PointOptimizer::BundleAdjustment(const std::vector<KeyFrame*>& vpKF,
 }
 
 void PointOptimizer::TypeBundleAdjustment(const std::vector<KeyFrame*>& vpKF,
-                                     const std::vector<PointElement*>& vpPoints,
-                                     const int nIterations,
-                                     bool bRobust)
+                                          const std::vector<PointElement*>& vpPoints,
+                                          const int nIterations,
+                                          bool bRobust)
 {
     // Initial solver, be careful: new g2o use std::unique_ptr instead
     g2o::SparseOptimizer optimizer;
@@ -230,5 +229,60 @@ void PointOptimizer::TypeBundleAdjustment(const std::vector<KeyFrame*>& vpKF,
 }
 
 };
+
+cv::Point2d utils::pixel2cam(const cv::Mat& u, 
+                             const cv::Mat& K)
+{
+    return cv::Point2d(
+        (u.at<int>(0, 0) - K.at<double>(0, 2)) / K.at<double>(0, 0),
+        (u.at<int>(1, 0) - K.at<double>(1, 2)) / K.at<double>(1, 1)
+    );
+}
+
+cv::Mat utils::Triangulation(KeyFrame* pKF1,
+                             KeyFrame* pKF2,
+                             const cv::Mat& Pos1,
+                             const cv::Mat& Pos2)
+{
+    cv::Mat Tcw1 = pKF1->getPos();
+    cv::Mat Tcw2 = pKF2->getPos();
+
+    cv::Mat T1 = Tcw1.rowRange(0, 3);
+    cv::Mat T2 = Tcw2.rowRange(0, 3);
+
+    cv::Mat K = pKF1->getInner();
+
+    cv::Point2d u1 = utils::pixel2cam(Pos1, K);
+    cv::Point2d u2 = utils::pixel2cam(Pos2, K);
+
+    std::vector<cv::Point2d> pt1(1, u1);
+    std::vector<cv::Point2d> pt2(1, u2);
+
+    cv::Mat pos4D;
+    cv::triangulatePoints(
+        T1, T2, pt1, pt2, pos4D
+    );
+    pos4D /= pos4D.at<double>(3, 0);
+    // check
+    // std::cout << pos4D.at<double>(0, 0) << "," << pos4D.at<double>(1, 0) << "," << pos4D.at<double>(2, 0) << "," << pos4D.at<double>(3, 0) << std::endl;
+    // cv::Mat pos = (cv::Mat_<double>(3, 1) << pos4D.at<double>(0, 0), 
+    //                                          pos4D.at<double>(1, 0), 
+    //                                          pos4D.at<double>(2, 0));
+    // PointElement* marker = new Marker(pos, pKF1, false);
+    // std::cout << "cur 3D coord is: " << pos.at<double>(0, 0) << "," << pos.at<double>(1, 0) << "," << pos.at<double>(2, 0) << std::endl;
+    // std::cout << "Inner matrix is: " << std::endl << K << std::endl;
+    // std::cout << "pixel coord in cam1 is: " << Pos1.at<int>(0, 0) << "," << Pos1.at<int>(1, 0) << std::endl;
+    // std::cout << "pixel coord in cam2 is: " << Pos2.at<int>(0, 0) << "," << Pos2.at<int>(1, 0) << std::endl;
+    // std::cout << "Projection to cam1 is: " << pKF1->ProjectPoint(marker).at<double>(0, 0) << "," << pKF1->ProjectPoint(marker).at<double>(1, 0) << std::endl;
+    // std::cout << "Projection to cam2 is: " << pKF2->ProjectPoint(marker).at<double>(0, 0) << "," << pKF2->ProjectPoint(marker).at<double>(1, 0) << std::endl;
+
+    return pos4D.clone();
+}
+
+void utils::writeVisulizationJson(const std::string output_path,
+                                  std::map<std::string, std::map<int, std::map<char, PointElement*> > > group_3D)
+{
+    
+}
 
 };

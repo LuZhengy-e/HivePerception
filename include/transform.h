@@ -17,13 +17,14 @@ namespace HIVE_SLAM{
 
 class CoordTranform{
 public:
+    CoordTranform();
     /**
      * @brief construct function
      * @param[in] K inner parameter
      * @param[in] Tcl Transform matrix from camera to lidar
      * @param[in] Tcv Transform matrix from camera to vehicle 
      **/
-    explicit CoordTranform(cv::Mat& K, cv::Mat& Tcl, cv::Mat& Tcv);
+    CoordTranform(cv::Mat& K, cv::Mat& Tcl, cv::Mat& Tcv);
 
     /**
      * @brief give a lidar point, transform it to camera coord
@@ -35,7 +36,7 @@ public:
      * @brief give a 3d point, transform it to pixel coord
      * @param[in] point point in world coord 
      **/
-    cv::Mat Tcp(cv::Mat& point, cv::Mat& Tcw);
+    cv::Mat Tcp(const cv::Mat& point, const cv::Mat& Tcw);
 
     /**
      * @brief give a lidar point, transform it to pixel coord

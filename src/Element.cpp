@@ -56,7 +56,7 @@ cv::Mat PointElement::getProjection(KeyFrame* pKF){
 }
 
 Eigen::Matrix<double, 3, 1> PointElement::getVectorPos() const{
-    Eigen::Matrix<double,3,1> v;
+    Eigen::Matrix<double, 3, 1> v;
     v << mWorldPos.at<double>(0), mWorldPos.at<double>(1), mWorldPos.at<double>(2);
 
     return v;

@@ -1,21 +1,21 @@
 #include<dirent.h>
 #include "data.h"
 
-void getFile(const std::string& dirname, std::vector<std::string>& files){
-    struct dirent* ent = nullptr;
-    DIR *dir = opendir(dirname.c_str());
+// void getFile(const std::string& dirname, std::vector<std::string>& files){
+//     struct dirent* ent = nullptr;
+//     DIR *dir = opendir(dirname.c_str());
 
-    if(dir != nullptr){
-        while ((ent = readdir(dir)) != NULL){
-            if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0)
-            {
-                //std::cout << ent->d_name << std::endl;
-                files.push_back(ent->d_name);
-            }
-        }
-        closedir(dir);
-    }
-}
+//     if(dir != nullptr){
+//         while ((ent = readdir(dir)) != NULL){
+//             if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0)
+//             {
+//                 //std::cout << ent->d_name << std::endl;
+//                 files.push_back(ent->d_name);
+//             }
+//         }
+//         closedir(dir);
+//     }
+// }
 
 int main(int argc, char* argv[]){
     if(argc != 3){
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
     std::vector<std::string> files;
     files.reserve(10000);
 
-    getFile(input, files);
+    HIVE_SLAM::getFile(input, files);
     std::cout << files.size() << std::endl;
 
     for(auto file: files){

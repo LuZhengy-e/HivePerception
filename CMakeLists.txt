@@ -7,8 +7,8 @@ ENDIF()
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3 -march=native ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3 -march=native")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall  -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
 LIST( APPEND CMAKE_MODULE_PATH /home/luzhengye/package/g2o/cmake_modules )
 set(G2O_ROOT /usr/local/include/g2o)
 
@@ -67,6 +67,7 @@ src/data.cpp
 src/Element.cpp
 src/KeyFrame.cpp
 src/Marker.cpp
+src/Pole.cpp
 src/transform.cpp
 )
 

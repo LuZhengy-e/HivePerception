@@ -14,4 +14,12 @@ void Marker::setID(){
     mnId = markerID++;
 }
 
+void Marker::setPosType(const char& postype){
+    mpostype = postype;
+}
+
+void Marker::addFriends(const long unsigned int& friendId){
+    msfriends.insert(friendId);
+}
+
 };

@@ -16,17 +16,35 @@ KeyFrame::KeyFrame(const cv::Mat &img,
 {
     Tcw.copyTo(mTcw);
     K.copyTo(mK);
+    img.copyTo(mImage);
     mnId = KeyFrameId++;
+
+    // check
+    // std::cout << "number:" << mnId << " KeyFrame has been created" << std::endl;
+    // std::cout << "inner parameter K is: " << std::endl;
+    // for(int i = 0; i < 3; ++i){
+    //     for(int j = 0; j < 3; ++j){
+    //         std::cout << mK.at<double>(i, j) << ",";
+    //     }
+    //     std::cout << std::endl;
+    // }
+    // std::cout << "cur pose is:" << std::endl;
+    // for(int i = 0; i < 4; ++i){
+    //     for(int j = 0; j < 4; ++j){
+    //         std::cout << mTcw.at<double>(i, j) << ",";
+    //     }
+    //     std::cout << std::endl;
+    // }
 }
 
 cv::Mat KeyFrame::ProjectPoint(PointElement* point){
     cv::Mat P = point->getWorldPos();
     cv::Mat P_homogeneous = cv::Mat::ones(4, 1, CV_64F);
     P.copyTo(P_homogeneous.rowRange(0, 3));
-    double z = P.at<double>(2, 0);
 
-    cv::Mat rotate_p = mTcw * P_homogeneous / z;
-    cv::Mat pixel = mK * (rotate_p.rowRange(0, 3));
+    cv::Mat rotate_p = mTcw * P_homogeneous;
+    double z = rotate_p.at<double>(2, 0);
+    cv::Mat pixel = mK * (rotate_p.rowRange(0, 3)) / z;
 
     return pixel.clone();
 }
